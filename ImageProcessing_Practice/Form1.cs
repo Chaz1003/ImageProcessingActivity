@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using WebCamLib;
 using ImageProcess2;
 using System.ComponentModel;
+using HNUDIP;
+using Microsoft.VisualBasic.Devices;
 
 namespace ImageProcessing_Practice
 {
@@ -261,6 +263,119 @@ namespace ImageProcessing_Practice
             }
             pictureBox3.Image = resultImage;
 
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            HNUDIP.ImageProcess.Brightness(ref loaded, ref processed, trackBar1.Value);
+            pictureBox2.Image = processed;
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            HNUDIP.ImageProcess.Equalisation(ref loaded, ref processed, trackBar2.Value / 100);
+            pictureBox2.Image = processed;
+        }
+
+        private void trackBar3_Scroll(object sender, EventArgs e)
+        {
+            HNUDIP.ImageProcess.Rotate(ref loaded, ref processed, trackBar3.Value);
+            pictureBox2.Image = processed;
+        }
+
+        private void scaleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HNUDIP.ImageProcess.Scale(ref loaded, ref processed, 100, 100);
+            pictureBox2.Image = processed;
+        }
+
+        private void binaryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = new Bitmap(loaded.Width, loaded.Height);
+            Color pixel;
+            int ave;
+            for (int x = 0; x < loaded.Width; x++)
+                for (int y = 0; y < loaded.Height; y++)
+                {
+                    pixel = loaded.GetPixel(x, y);
+                    ave = (int)(pixel.R + pixel.G + pixel.B) / 3;
+                    if (ave < 180)
+                        processed.SetPixel(x, y, Color.White);
+                    else
+                        processed.SetPixel(x, y, Color.Black);
+                }
+            pictureBox2.Image = processed;
+        }
+
+        private void smoothToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.Smooth(processed, 4);
+            pictureBox2.Image = processed;
+        }
+
+        private void gaussianBlurToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.GaussianBlur(processed, 4);
+            pictureBox2.Image = processed;
+
+        }
+
+        private void sharpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.Sharpen(processed, 11);
+            pictureBox2.Image = processed;
+        }
+
+        private void meanRemovalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.MeanRemoval(processed, 9);
+            pictureBox2.Image = processed;
+        }
+
+        private void embossHorizontalVerticalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.EmbossHorzVert(processed);
+            pictureBox2.Image = processed;
+        }
+
+        private void embossAllDirectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.EmbossAllDirection(processed);
+            pictureBox2.Image = processed;
+        }
+
+        private void embossVerticalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.EmbossVertical(processed);
+            pictureBox2.Image = processed;
+        }
+
+        private void embossHorizontalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.EmbossHorizontal(processed);
+            pictureBox2.Image = processed;
+        }
+
+        private void lossyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.Lossy(processed);
+            pictureBox2.Image = processed;
+        }
+
+        private void embossLaplascianToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processed = (Bitmap)loaded.Clone();
+            BitmapFilter.EmbossLaplacian(processed);
+            pictureBox2.Image = processed;
         }
     }
 }
